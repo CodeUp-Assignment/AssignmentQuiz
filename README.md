@@ -1,6 +1,6 @@
 # AssignmentQuiz
-Team:n\
-Sachinn\
+Team:\
+Sachin\
 Uddeshya 
 pratul
 Avdhi
