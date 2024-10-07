@@ -1,8 +1,8 @@
 # AssignmentQuiz
 Team:\
 Sachin\
-Uddeshya 
-pratul
-Avdhi
-Kiran
+Uddeshya\ 
+pratul\
+Avdhi\
+Kiran\
 
