@@ -4,7 +4,7 @@ public class Creator {
     private static final int MAX_QUESTION_LENGTH = 100;
     private static final int MAX_OPTION_LENGTH = 50;
     
-    private Quiz quiz;
+    public Quiz quiz;
 
     public void createQuiz(Scanner scanner) {
      
@@ -56,7 +56,6 @@ public class Creator {
                     }
                 } while (!question.setAnswer(correctAnswer));
 
-                // Add the question to the quiz
                 quiz.addQuestion(question);
                 System.out.println("Question added successfully.");
 
@@ -76,9 +75,8 @@ public class Creator {
             }
         }
 
-        scanner.close();
+//        scanner.close();
 
-        // Display the quiz
         try {
             quiz.displayQuiz();
         } catch (Exception e) {
@@ -86,14 +84,14 @@ public class Creator {
         }
     }
 
-    public static void main(String[] args) {
-    	
-    	Scanner scanner = new Scanner(System.in);
-    	   
-        Creator create = new Creator();
-        create.createQuiz(scanner);
-        
-
-        scanner.close();
-    }
+//    public static void main(String[] args) {
+//    	
+//    	Scanner scanner = new Scanner(System.in);
+//    	   
+//        Creator create = new Creator();
+//        create.createQuiz(scanner);
+//        
+//
+//        scanner.close();
+//    }
 }
