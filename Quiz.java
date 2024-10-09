@@ -1,5 +1,3 @@
-package practice.java;
-
 /**
  * The Quiz class represents a quiz with a title and a collection of questions.
  * It provides methods for adding questions and displaying quiz information.
