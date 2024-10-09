@@ -2,28 +2,27 @@
  * This class is create for attempting the quiz. In this the user get the questions and their options and after that they have to the user have to give the answer of that question or they can go to previous question or next question or they can submit the quiz in between the quiz if they want. In end they get the score of their quiz.
  */
 
-package project;
 
 import java.util.Scanner;
+
+import javax.net.ssl.HostnameVerifier;
 
 public class Participant {
 	
 	/*
 	 * This method is used for attempting the quiz and show the question and options to the user.
 	 */
-	public void attemptQuiz(Scanner input) {
-		Quiz quiz = new Quiz();
-		int questionLength = quiz.questions.length;
+	public void attemptQuiz(Creator host) {
+		Scanner input = new Scanner(System.in);
+		try {
+		int questionLength = host.quiz.questions.length;
 		String[] userAnswer = new String[questionLength];
-		if(quiz == null || questionLength == 0) {
-			System.out.println("Their is no Quiz created yet.");
-		}else {
 		System.out.println("Welcome to Quiz : \nFor Answer - Select from 1-4 \nFor Skip - Click Enter \nFor Previous Question - Write j \nFor Next Question - Write l \nFor Submit - Write k");
 		for(int i = 0 ; i < questionLength ; i++) {
-			System.out.println(quiz.questions[i].getQuestionText());
+			System.out.println(host.quiz.questions[i].getQuestionText());
 			for(int j = 0 ; j < 4 ; j++) {
-				System.out.println(quiz.questions[i].getOption(j));
-				System.out.println("Previous Question/t/t Next Question/t/t Submit");
+				System.out.println(host.quiz.questions[i].getOption(j));
+				System.out.println("Previous Question\t\t Next Question\t\t Submit");
 				System.out.println("Enter your Choice : ");
 				String answer = input.nextLine();
 				switch(answer) {
@@ -37,11 +36,11 @@ public class Participant {
 						break;
 					case "j" : 
 						int previousQuestionIndex = i - 1;
-						previousQuestion(previousQuestionIndex, answer, userAnswer);
+						previousQuestion(previousQuestionIndex, answer, userAnswer, host);
 						break;
 					case "l" : 
 						int nextQuestionIndex = i + 1;
-						nextQuestion(nextQuestionIndex, answer, userAnswer);
+						nextQuestion(nextQuestionIndex, answer, userAnswer, host);
 						break;
 					case "k" : submit(userAnswer);
 						break;
@@ -50,17 +49,20 @@ public class Participant {
 				}
 			}
 		}
-		}
+		
+	} catch (NullPointerException e) {
+		System.out.println("Their is no Quiz created yet.");
+	}
+		
 	}
 
 	/*
 	 * This method is used for next Question in Quiz.
 	 */
-	public static void nextQuestion(int nextQuestionIndex, String answer, String[] userAnswer) {
-		Quiz quiz = new Quiz();
-		System.out.println(quiz.questions[nextQuestionIndex].getQuestionText());
+	public static void nextQuestion(int nextQuestionIndex, String answer, String[] userAnswer,Creator host) {
+		System.out.println(host.quiz.questions[nextQuestionIndex].getQuestionText());
 		for(int i = 0 ; i < 1 ; i++) {
-			System.out.println(quiz.questions[nextQuestionIndex].getOption(i));
+			System.out.println(host.quiz.questions[nextQuestionIndex].getOption(i));
 			userAnswer[nextQuestionIndex] = answer;
 		}
 	}
@@ -68,11 +70,10 @@ public class Participant {
 	/*
 	 * This method is used for previous Question in Quiz.
 	 */
-	public static void previousQuestion(int previousQuestionIndex, String answer, String[] userAnswer) {
-		Quiz quiz = new Quiz();
-		System.out.println(quiz.questions[previousQuestionIndex].getQuestionText());
+	public static void previousQuestion(int previousQuestionIndex, String answer, String[] userAnswer,Creator host) {
+		System.out.println(host.quiz.questions[previousQuestionIndex].getQuestionText());
 		for(int i = 0 ; i < 1 ; i++) {
-			System.out.println(quiz.questions[previousQuestionIndex].getOption(i));
+			System.out.println(host.quiz.questions[previousQuestionIndex].getOption(i));
 			userAnswer[previousQuestionIndex] = answer;
 		}
 	}
