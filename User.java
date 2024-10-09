@@ -1,5 +1,3 @@
-package practice.java;
-
 /*
  * The User class defines a blueprint for user objects with common properties (name and email) and an abstract method for performing role-specific actions in the quiz application.
  * Created By : Sachin-Gupta
