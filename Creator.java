@@ -20,7 +20,7 @@ public class Creator {
                 // Get valid question text (not empty and within max length)
                 String questionText;
                 do {
-                    System.out.println("Enter the question text (max " + MAX_QUESTION_LENGTH + " characters):");
+                    System.out.println("Enter the question text: ");
                     questionText = scanner.nextLine();
                     if (questionText.trim().isEmpty()) {
                         System.out.println("Question cannot be empty. Please try again.");
@@ -34,7 +34,7 @@ public class Creator {
                 for (int j = 0; j < 4; j++) {
                     String option;
                     do {
-                        System.out.println("Enter option " + (j + 1) + " (max " + MAX_OPTION_LENGTH + " characters):");
+                        System.out.println("Enter option " + (j + 1) + ":");
                         option = scanner.nextLine();
                         if (option.trim().isEmpty()) {
                             System.out.println("Option cannot be empty. Please try again.");
