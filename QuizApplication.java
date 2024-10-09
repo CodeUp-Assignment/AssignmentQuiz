@@ -1,5 +1,3 @@
-package practice.java;
-
 /*
  * This is the class from where the program runs.
  * Created By : Sachin-Gupta
