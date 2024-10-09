@@ -1,23 +1,10 @@
-
-//public class Question {
-//	public String question = "";
-//	public String option1 = "";
-//	public String option2 = "";
-//	public String option3 = "";
-//	public String option4 = "";
-//	public String answer = "";
-//
-//}
-
-
 public class Question {
-    private String question;
-    private String[] options = new String[4];  
+    private String questionText;
+    private String[] options = new String[4];
     private String answer;
 
-    // Setters to allow iterative question building
     public void setQuestionText(String questionText) {
-        this.question = questionText;
+        this.questionText = questionText;
     }
 
     public void setOption(int index, String option) {
@@ -26,7 +13,6 @@ public class Question {
         }
     }
 
-    // Validates and sets the answer only if it matches one of the options
     public boolean setAnswer(String answer) {
         for (String option : options) {
             if (answer.equalsIgnoreCase(option)) {
@@ -34,12 +20,11 @@ public class Question {
                 return true;
             }
         }
-        return false;  
+        return false;
     }
 
-    // Getters for accessing question details
     public String getQuestionText() {
-        return question;
+        return questionText;
     }
 
     public String getOption(int index) {
@@ -53,9 +38,8 @@ public class Question {
         return answer;
     }
 
-    // Method to display a single question
     public void displayQuestion(int questionNumber) {
-        System.out.println("Q" + questionNumber + ": " + question);
+        System.out.println("Q" + questionNumber + ": " + questionText);
         for (int i = 0; i < 4; i++) {
             System.out.println((i + 1) + ". " + options[i]);
         }
