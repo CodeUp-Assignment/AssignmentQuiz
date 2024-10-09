@@ -1,97 +1,157 @@
+/***
+ * The Creator class is responsible for facilitating the creation of quizzes and the addition of questions to a question bank. 
+ * It provides methods to interact with the user, guiding them through the process of creating quizzes and managing questions.
+ * 
+ * Owner : Avadhi-Singhal
+ * 
+ * Date of Creation : 09/10/2024
+ */
+
 import java.util.Scanner;
 
 public class Creator {
-    private static final int MAX_QUESTION_LENGTH = 100;
-    private static final int MAX_OPTION_LENGTH = 50;
-    
-    public Quiz quiz;
+	
+	//Initiates the quiz creation process. It prompts the user to choose between creating a quiz, adding questions, 
+	//or exiting the application. Depending on the user's choice, it either creates a quiz or adds questions.
+    public void create(Scanner scanner) {
+        while (true) {
+            System.out.println("Do you want to create a quiz, add questions, or exit? (create quiz/add questions/exit)");
+            String choice = scanner.nextLine();
 
-    public void createQuiz(Scanner scanner) {
-     
-        System.out.println("Enter the title of the quiz: ");
-        String title = scanner.nextLine();
-        quiz = new Quiz(title);
-
-        boolean addingQuestions = true;
-        while (addingQuestions) {
-            try {
-                Question question = new Question();
-
-                // Get valid question text (not empty and within max length)
-                String questionText;
-                do {
-                    System.out.println("Enter the question text: ");
-                    questionText = scanner.nextLine();
-                    if (questionText.trim().isEmpty()) {
-                        System.out.println("Question cannot be empty. Please try again.");
-                    } else if (questionText.length() > MAX_QUESTION_LENGTH) {
-                        System.out.println("Question is too long. Maximum allowed length is " + MAX_QUESTION_LENGTH + " characters.");
-                    }
-                } while (questionText.trim().isEmpty() || questionText.length() > MAX_QUESTION_LENGTH);
-                question.setQuestionText(questionText);
-
-                // Get 4 valid options (not empty and within max length)
-                for (int j = 0; j < 4; j++) {
-                    String option;
-                    do {
-                        System.out.println("Enter option " + (j + 1) + ":");
-                        option = scanner.nextLine();
-                        if (option.trim().isEmpty()) {
-                            System.out.println("Option cannot be empty. Please try again.");
-                        } else if (option.length() > MAX_OPTION_LENGTH) {
-                            System.out.println("Option is too long. Maximum allowed length is " + MAX_OPTION_LENGTH + " characters.");
-                        }
-                    } while (option.trim().isEmpty() || option.length() > MAX_OPTION_LENGTH);
-                    question.setOption(j, option);
-                }
-
-                // Get valid correct answer (must match one of the options)
-                String correctAnswer;
-                do {
-                    System.out.println("Enter the correct answer (must match one of the options):");
-                    correctAnswer = scanner.nextLine();
-
-                    if (!question.setAnswer(correctAnswer)) {
-                        System.out.println("Invalid answer. Please choose an answer from the provided options.");
-                    }
-                } while (!question.setAnswer(correctAnswer));
-
-                quiz.addQuestion(question);
-                System.out.println("Question added successfully.");
-
-            } catch (Exception e) {
-                System.out.println("Error while adding the question. Please try again.");
-                continue;
+            if (choice.equalsIgnoreCase("exit")) {
+                return; 
             }
-            try {
-                System.out.println("Do you want to add another question? (yes/no)");
-                String response = scanner.nextLine();
-                if (response.equalsIgnoreCase("no")) {
-                    addingQuestions = false;
-                }
-            } catch (Exception e) {
-                System.out.println("Error reading your response. Ending quiz creation.");
-                addingQuestions = false;
+            
+            switch (choice.toLowerCase()) {
+                case "create quiz":
+                    String title = getValidTitle(scanner);
+                    Quiz quiz = new Quiz(title);
+                    createQuiz(scanner, quiz);
+                    break;
+
+                case "add questions":
+                    addQuestions(scanner);
+                    break;
+
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+                    break;
             }
-        }
-
-//        scanner.close();
-
-        try {
-            quiz.displayQuiz();
-        } catch (Exception e) {
-            System.out.println("Error displaying the quiz. Please check the questions.");
         }
     }
 
-//    public static void main(String[] args) {
-//    	
-//    	Scanner scanner = new Scanner(System.in);
-//    	   
-//        Creator create = new Creator();
-//        create.createQuiz(scanner);
-//        
-//
-//        scanner.close();
-//    }
+    //Prompts the user for the title of the quiz and validates the input to ensure it is not empty and does not exceed 
+    //100 characters. Returns a valid title.
+    private String getValidTitle(Scanner scanner) {
+        String title;
+        do {
+            System.out.println("Enter the title of the quiz (cannot be empty and must be less than 100 characters): ");
+            title = scanner.nextLine();
+        } while (title.trim().isEmpty() || title.length() > 100); 
+        return title;
+    }
+
+    //Displays the available questions in the question bank and allows the user to add questions to the specified 
+    //quiz using their IDs. If no questions are available, it returns to the main menu.
+    private void createQuiz(Scanner scanner, Quiz quiz) {
+        Question.displayQuestions(); 
+
+        if (Question.getTotalQuestions() == 0) {
+            System.out.println("No questions available to add to the quiz. Returning to main menu.");
+            return; 
+        }
+
+        while (true) {
+            System.out.println("Enter the question ID to add to the quiz (or type 'done' to finish): ");
+            String input = scanner.nextLine();
+            if (input.equalsIgnoreCase("done")) {
+                break;
+            }
+
+            try {
+                int questionId = Integer.parseInt(input);
+                Question question = Question.getQuestionById(questionId);
+                if (question != null) {
+                    quiz.addQuestion(question);
+                } else {
+                    System.out.println("Invalid question ID.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Please enter a valid number or 'done' to finish.");
+            }
+        }
+        quiz.displayQuiz();
+    }
+
+    //Allows the user to add multiple questions to the question bank. The user can input questions 
+    //and options until they type 'done' to finish.
+    private void addQuestions(Scanner scanner) {
+        System.out.println("You can add multiple questions. Type 'done' when you are finished.");
+
+        while (true) {
+            String questionText = getQuestionText(scanner);
+            if (questionText.equalsIgnoreCase("done")) {
+                break; 
+            }
+
+            String[] options = getOptions(scanner);
+            String answer = getAnswer(scanner, options); 
+            Question.addQuestionBank(questionText, options, answer);
+        }
+    }
+
+    //Prompts the user for the text of the question, ensuring it is not empty and does not exceed 100 characters. 
+    //If the user types 'done', it returns this input. Otherwise, it returns a valid question text.
+    private String getQuestionText(Scanner scanner) {
+        String questionText;
+        do {
+            System.out.println("Enter the question text (cannot be empty and must be less than 100 characters):");
+            questionText = scanner.nextLine();
+            if (questionText.equalsIgnoreCase("done")) {
+                return questionText; 
+            }
+        } while (questionText.trim().isEmpty() || questionText.length() > 100); 
+        return questionText;
+    }
+
+    //Prompts the user to enter four options for a question, validating that each option is not empty and does not 
+    //exceed 100 characters. Returns an array of valid options.
+    private String[] getOptions(Scanner scanner) {
+        String[] options = new String[4];
+        for (int i = 0; i < 4; i++) {
+            String option;
+            do {
+                System.out.println("Enter option " + (i + 1) + " (cannot be empty and must be less than 100 characters):");
+                option = scanner.nextLine();
+            } while (option.trim().isEmpty() || option.length() > 100); 
+            options[i] = option;
+        }
+        return options;
+    }
+
+    //Prompts the user to enter the correct answer for the question, ensuring that it matches one of the provided
+    //options and is not empty. Returns a valid answer.
+    private String getAnswer(Scanner scanner, String[] options) {
+        String answer;
+        while (true) {
+            System.out.println("Enter the correct answer (must be one of the options and cannot be empty):");
+            answer = scanner.nextLine();
+
+            boolean isValid = false;
+            for (String option : options) {
+                if (answer.equals(option)) {
+                    isValid = true;
+                    break;
+                }
+            }
+            
+            if (answer.trim().isEmpty() || answer.length() > 100 || !isValid) {
+                System.out.println("Invalid answer. Please make sure it is one of the options and not empty.");
+            } else {
+                break; 
+            }
+        }
+        return answer;
+    }
+
 }
