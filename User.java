@@ -1,41 +1,37 @@
+/*
+ * The User class defines a blueprint for user objects with common properties (name and email) and an abstract method for performing role-specific actions in the quiz application.
+ * Created By : Sachin Gupta
+ * Date of Creation : 08/10/2024
+ */
+package QuizProject;
 import java.util.Scanner;
+public abstract class User {
+    private String name;
+    private String email;
 
-//Main class to handle user choice
-public class User {
- public static void main(String[] args) {
-     Scanner scanner = new Scanner(System.in);
-     Creator host = new Creator();
+    // Constructor to initialize name and email
+    public User(String name, String email) {
+        this.name = name;
+        this.email = email;
+    }
 
-     try {
-         while (true) {
-             System.out.println("Wait A Minute! Who are you...?");
-             System.out.println("1. Creator\n2. Participant");
-             System.out.println("Enter 1 for Creator and 2 for Participant (or type 'exit' to quit):");
-
-             String choice = scanner.next();
-
-             if (choice.equalsIgnoreCase("exit")) {
-                 System.out.println("Exiting the quiz system...");
-                 break;
-             }
-
-             switch (choice) {
-                 case "1":
-                     host.createQuiz(scanner);
-                     break;
-                 case "2":
-                     Participant participant = new Participant();
-                     participant.attemptQuiz(host);
-                     break;
-                 default:
-                     System.out.println("Invalid Choice, please try again.");
-                     break;
-             }
-         }
-     } catch (RuntimeException e) {
-         throw new RuntimeException(e);
-     } finally {
-         scanner.close();
-     }
- }
+    // Get the name
+    public String getName() {
+        return name;
+    }
+    // Set the name
+    public void setName(String name) {
+        this.name = name;
+    }
+    // Get the email
+    public String getEmail() {
+        return email;
+    }
+    // Set the email
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    // performing role-specific actions
+    public abstract void performAction(Scanner scanner);
 }
+
