@@ -2,10 +2,11 @@ public class Quiz {
     private String title;
     public Question[] questions;
     private int currentQuestionCount = 0;
-
-    public Quiz(){
-    }
     
+    public Quiz () {
+    	
+    }
+
     public Quiz(String title) {
         this.title = title;
         this.questions = new Question[5];
