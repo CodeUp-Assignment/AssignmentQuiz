@@ -1,5 +1,3 @@
-package practice.java;
-
 /**
  * The DefaultQuiz class represents a default quiz with pre-defined questions.
  * It is used when no quizzes have been created by the user.
@@ -8,17 +6,22 @@ package practice.java;
  * 
  * Date of Creation : 08/10/2024
  */
+
 public class DefaultQuiz extends Quiz {
-    
-    // Constructor that initializes the default quiz with a title
+
+    /** 
+     * Constructor for the DefaultQuiz class, initializing the quiz with a predefined title and loading the default questions.
+     */
     public DefaultQuiz() {
-        super("Default Java Quiz");
-        initializeDefaultQuestions();
+        super("Default Java Quiz"); 
+        initializeDefaultQuestions(); 
     }
 
-    // Method to initialize the default quiz questions and options
+    /** 
+     * Initializes the default questions, options, and answers for the quiz.
+     * It creates Question objects and adds them to the quiz.
+     */
     private void initializeDefaultQuestions() {
-        // Example questions and options for the default quiz
         String[] questions = {
             "What is the keyword used to create a class in Java?",
             "Which data type is used to create a variable that should store text?",
@@ -43,19 +46,10 @@ public class DefaultQuiz extends Quiz {
             "102030"
         };
 
-        // Add the questions to the quiz
+        // Loop through each question and create a Question object
         for (int i = 0; i < questions.length; i++) {
-            Question question = new Question();
-            question.setQuestionText(questions[i]);
-
-            // Set options
-            for (int j = 0; j < options[i].length; j++) {
-                question.setOption(j, options[i][j]);
-            }
-
-            // Set the correct answer
-            question.setAnswer(answers[i]);
-            addQuestion(question); // Method inherited from Quiz class
+            Question question = new Question(questions[i], options[i], answers[i]); 
+            addQuestion(question);  
         }
     }
 }
