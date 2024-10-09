@@ -3,6 +3,9 @@ public class Quiz {
     public Question[] questions;
     private int currentQuestionCount = 0;
 
+    public Quiz(){
+    }
+    
     public Quiz(String title) {
         this.title = title;
         this.questions = new Question[5];
