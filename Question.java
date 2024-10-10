@@ -51,7 +51,7 @@ public class Question {
         if (index >= 0 && index < options.length) {
             return options[index];
         }
-        return null; // Or throw an exception
+        return null; 
     }
 
     /** 
@@ -82,7 +82,7 @@ public class Question {
      * Returns the total number of questions in the question bank.
      */
     public static int getTotalQuestions() {
-        return questionCount; // Returns the total number of questions added
+        return questionCount; 
     }
 
     /** 
@@ -95,13 +95,13 @@ public class Question {
                 return questionBank[i];
             }
         }
-        return null; // If not found
+        return null; 
     }
 
     /** 
      * Adds a new question to the question bank.
      */
     public static void addQuestionBank(String questionText, String[] options, String answer) {
-        new Question(questionText, options, answer); // Automatically adds to the question bank
+        new Question(questionText, options, answer); 
     }
 }
