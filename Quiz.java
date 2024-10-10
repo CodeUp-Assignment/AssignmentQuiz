@@ -10,10 +10,9 @@ package assignment_java_programming;
  */
 
 public class Quiz {
-    private String title; // Title of the quiz
-    private Question[] questions = new Question[5]; // Array to hold questions
-    private int currentQuestionCount = 0; // Count of current questions
-
+    private String title; 
+    private Question[] questions = new Question[5]; 
+    private int currentQuestionCount = 0; 
     /** 
      * Constructs a Quiz object with a specified title.
      */
@@ -27,7 +26,7 @@ public class Quiz {
      */
     public void addQuestion(Question question) {
         if (currentQuestionCount >= questions.length) {
-            resizeQuestionsArray(); // Resize if necessary
+            resizeQuestionsArray(); 
         }
         questions[currentQuestionCount++] = question;
         System.out.println("Question added to quiz: " + question.getQuestionText());
@@ -48,14 +47,14 @@ public class Quiz {
      * @return the number of questions in the quiz
      */
     public int getQuestionCount() {
-        return currentQuestionCount; // Method to get the count of questions
+        return currentQuestionCount; 
     }
 
     /** 
      * @return the title of the quiz
      */
     public String getTitle() {
-        return title; // Method to get the title of the quiz
+        return title; 
     }
 
     /** 
@@ -75,7 +74,7 @@ public class Quiz {
     public void displayQuiz() {
         System.out.println("Quiz Title: " + title);
         for (int i = 0; i < currentQuestionCount; i++) {
-            System.out.println("ID: " + questions[i].getQuestionText()); // Display each question
+            System.out.println("ID: " + questions[i].getQuestionText()); 
         }
     }
 }
