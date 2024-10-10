@@ -35,8 +35,8 @@ public final class Constants {
     
     public static final String PARTICIPANT_CHOICE = "For Answer - Select from 1-4 \n" +
     		"For Skip - Click Enter \n" +
-    		"For Previous Question - Write j \n " +
-    		"For Next Question - Write l \n " +
+    		"For Previous Question - Write j \n" +
+    		"For Next Question - Write l \n" +
     		"For Ending a Quiz and submitting your answer - Write k";
      
     public static final String[] DEFAULT_QUESTIONS =  {
@@ -64,4 +64,40 @@ public final class Constants {
         };  
   
     public static final String EXIT = "Exiting program...";
+    
+    public static final String PARTICIPANT = "Participant ";
+    
+    public static final String PERFORMING_QUIZ = " is performing an quiz.";
+    
+    public static final String START_QUIZ = "Let's start the quiz : ";
+    
+    public static final String AVAILABLE_QUIZ = "Available quizzes: ";
+    
+    public static final String PLACEHOLDER = "Placeholder";
+    
+    public static final String EMAIL_ID ="placeholder@mail.com";
+
+    public static final String START_QUIT_QUIZ = "Type 1 to play the default quiz. Type 'exit' to leave.";
+    
+    public static final String EXIT_QUIZ = "exit";
+    
+    public static final String WELCOME = "Welcome to the Quiz : ";
+    
+    public static final String FIRST_QUESTION = "Already at First Question";
+    
+    public static final String LAST_QUESTION = "Already at Last Question";
+    
+    public static final String QUESTION_NO = "Question ";
+    
+    public static final String NOT_AVAILABLE = " is not available.";
+
+    public static final String USERS_CHOICE = "Enter your Choice : ";
+
+    public static final String FINISH ="Quiz Finished!";
+    
+    public static final String SCORE = "Total Score: ";
+    
+    public static final String OUT_OF = " out of ";
+    
+    public static final String NEXT_PREVIOUS_QUESTION = "Previous Question\t\t Next Question\t\t Submit";
 }
