@@ -9,7 +9,7 @@ package assignment_java_programming;
 import java.util.Scanner;
 
 public class QuizApplication {
-
+	
     // Validates the email format by checking for "@" and "."
     private static boolean isValidEmail(String email) {
         return email.contains("@") && email.contains(".");
@@ -18,7 +18,8 @@ public class QuizApplication {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
         try {
-            while (true) {
+        	DefaultQuiz defaultQuiz = new DefaultQuiz();
+        	while (true) {
                 System.out.println(Constants.NAME);
                 String name = input.nextLine();
 
@@ -46,6 +47,9 @@ public class QuizApplication {
                         break;
                     case "2":
                         // Placeholder for Participant actions 
+                    	user = new Participant(name, email);
+                    	((Participant) user).performAction(input); 
+                        ((Participant) user).participateInQuiz(input, defaultQuiz);
                         break;
                     default:
                         System.out.println("Invalid Choice, please try again.");
