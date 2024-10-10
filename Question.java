@@ -23,7 +23,6 @@ public class Question {
         this.options = options;
         this.answer = answer;
 
-        // Add the question to the bank if there is space
         if (questionCount <= questionBank.length) {
             questionBank[questionCount - 1] = this; 
         }
