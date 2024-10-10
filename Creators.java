@@ -40,7 +40,7 @@ public class Creators extends User {
             switch (choice.toLowerCase()) {
                 case "create quiz":
                     String title = getValidTitle(input);
-                    currentQuiz = new Quiz(title); // Store the created quiz
+                    currentQuiz = new Quiz(title); 
                     createQuiz(input, currentQuiz);
                     break;
 
