@@ -6,8 +6,8 @@
  * Date of Creation : 21/10/2024
  */
 public class Constant {
-	  public String EXIT_MESSAGE = "Exiting...";
-	  public String INVALID_CHOICE =  "Invalid choice. Please try again.";
+    public String EXIT_MESSAGE = "Exiting...";
+    public String INVALID_CHOICE =  "Invalid choice. Please try again.";
     public String EMPTY_QUESTION_BANK_MSG = "No questions available to add to the quiz. Returning to main menu.";
     public String ADD_QUESTION_BY_ID = "Enter the question ID to add to the quiz (or type 'done' to finish): ";
     public String DONE = "done";
