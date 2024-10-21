@@ -9,33 +9,42 @@ package assignment_java_programming;
  * Date of Creation : 09/10/2024
  */
 
+/***
+ * The Creator class is responsible for facilitating the creation of quizzes and the addition of questions to a question bank.
+ * It provides methods to interact with the user, guiding them through the process of creating quizzes and managing questions.
+ *
+ * Owner : Avadhi-Singhal
+ *
+ * Date of Creation : 09/10/2024
+ */
+
 import java.util.Scanner;
 
 public class Creator {
 
-    // Initiates the quiz creation process with a termination condition
     public void create(Scanner scanner, QuestionBank questionBank) {
         boolean continueLoop = true;
         while (continueLoop) {
-            System.out.println("Do you want to create a quiz, add questions, or exit? (create quiz/add questions/exit)");
-            String choice = scanner.nextLine();
+            displayMenu();
 
-            if (choice.equalsIgnoreCase("exit")) {
-                continueLoop = false;
-                return;
-            }
+            int choice = getValidChoice(scanner);
 
-            switch (choice.toLowerCase()) {
-                case "create quiz":
-                    String title = getValidTitle(scanner);
+            switch (choice) {
+                case 1:
+                    String title = getTitle(scanner);
                     Quiz quiz = new Quiz(title);
                     createQuiz(scanner, quiz, questionBank);
-                    continueLoop = false; 
+                    continueLoop = false; // End after creating quiz
                     break;
 
-                case "add questions":
+                case 2:
                     addQuestions(scanner, questionBank);
-                    continueLoop = false; 
+                    continueLoop = false; // End after adding questions
+                    break;
+
+                case 3:
+                    continueLoop = false; // Exit option
+                    System.out.println("Exiting...");
                     break;
 
                 default:
@@ -45,8 +54,32 @@ public class Creator {
         }
     }
 
-    // Gets a valid title for the quiz
-    private String getValidTitle(Scanner scanner) {
+    private void displayMenu() {
+        System.out.println("Choose an option: ");
+        System.out.println("1. Create quiz");
+        System.out.println("2. Add questions");
+        System.out.println("3. Exit");
+    }
+
+    private int getValidChoice(Scanner scanner) {
+        int choice = 0;
+        while (true) {
+            try {
+                System.out.print("Enter your choice (1-3): ");
+                choice = Integer.parseInt(scanner.nextLine());
+                if (choice < 1 || choice > 3) {
+                    System.out.println("Please enter a number between 1 and 3.");
+                    continue;
+                }
+                break; // Valid choice, exit the loop
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a number between 1 and 3.");
+            }
+        }
+        return choice;
+    }
+
+    private String getTitle(Scanner scanner) {
         String title;
         do {
             System.out.println("Enter the title of the quiz (cannot be empty and must be less than 100 characters): ");
@@ -55,44 +88,52 @@ public class Creator {
         return title;
     }
 
-    // Creates a quiz by adding questions from the question bank
     private void createQuiz(Scanner scanner, Quiz quiz, QuestionBank questionBank) {
         questionBank.displayQuestions();
 
-        if (questionBank.getQuestionById(1) == null) {  
+        if (questionBank.getQuestionCount() == 0) {
             System.out.println("No questions available to add to the quiz. Returning to main menu.");
             return;
         }
 
-        while (true) {
+        boolean addingQuestions = true;
+        while (addingQuestions) {
             System.out.println("Enter the question ID to add to the quiz (or type 'done' to finish): ");
             String input = scanner.nextLine();
             if (input.equalsIgnoreCase("done")) {
+                addingQuestions = false;
                 break;
             }
 
-            try {
-                int questionId = Integer.parseInt(input);
-                Question question = questionBank.getQuestionById(questionId);
-                if (question != null) {
-                    quiz.addQuestion(question);
-                } else {
-                    System.out.println("Invalid question ID.");
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("Please enter a valid number or 'done' to finish.");
-            }
+            addQuestionToQuiz(scanner, input, quiz, questionBank);
         }
-        quiz.displayQuiz();
+        quiz.displayQuiz(); // Display the quiz with added questions
     }
 
-    // Adds multiple questions to the question bank
+    private void addQuestionToQuiz(Scanner scanner, String input, Quiz quiz, QuestionBank questionBank) {
+        try {
+            int questionId = Integer.parseInt(input);
+            Question question = questionBank.getQuestionById(questionId);
+            if (question != null) {
+                // Add the question directly to the Quiz display
+                System.out.println("Adding question: " + question.getQuestionText());
+                quiz.displayQuiz(); // Update the quiz display to show the added question
+            } else {
+                System.out.println("Invalid question ID.");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Please enter a valid number or 'done' to finish.");
+        }
+    }
+
     private void addQuestions(Scanner scanner, QuestionBank questionBank) {
         System.out.println("You can add multiple questions. Type 'done' when you are finished.");
 
-        while (true) {
+        boolean addingQuestions = true;
+        while (addingQuestions) {
             String questionText = getQuestionText(scanner);
             if (questionText.equalsIgnoreCase("done")) {
+                addingQuestions = false;
                 break;
             }
 
@@ -102,7 +143,6 @@ public class Creator {
         }
     }
 
-    // Gets a valid question text
     private String getQuestionText(Scanner scanner) {
         String questionText;
         do {
@@ -112,7 +152,6 @@ public class Creator {
         return questionText;
     }
 
-    // Gets multiple valid options
     private String[] getOptions(Scanner scanner) {
         System.out.println("Enter the number of options: ");
         int optionCount = Integer.parseInt(scanner.nextLine());
@@ -128,26 +167,48 @@ public class Creator {
         return options;
     }
 
-    // Gets a valid answer
     private String getAnswer(Scanner scanner, String[] options) {
-        String answer;
-        while (true) {
+        String answer = null;
+        boolean valid = false;
+
+        while (!valid) {
             System.out.println("Enter the correct answer (must be one of the options and cannot be empty):");
             answer = scanner.nextLine();
+            valid = !answer.trim().isEmpty();
 
-            boolean isValid = false;
+            // Check if answer is one of the options
             for (String option : options) {
                 if (answer.equals(option)) {
-                    isValid = true;
+                    valid = true;
                     break;
                 }
             }
 
-            if (answer.trim().isEmpty() || !isValid) {
+            if (!valid) {
                 System.out.println("Invalid answer. Please choose from the given options.");
-            } else {
-                return answer;
             }
         }
+
+        return answer; // Return the valid answer
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Creator creator = new Creator();
+        QuestionBank questionBank = new QuestionBank();
+
+        // Start the creation process
+        creator.create(scanner, questionBank);
+
+        // Close the scanner after use
+        scanner.close();
     }
 }
+
+
+
+
+
+
+
+
