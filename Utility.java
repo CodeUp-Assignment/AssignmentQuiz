@@ -1,3 +1,4 @@
+package assignment_java_programming;
 import java.util.Scanner;
 
 public class Utility {
