@@ -1,4 +1,11 @@
 package assignment_java_programming;
+/***
+ * This is the utility class. It provides functioning for validation of user inputs while creating quiz.
+ * 
+ * Owner: Avadhi-Singhal
+ * 
+ * Date of Creation : 21/10/2024
+ */
 import java.util.Scanner;
 
 public class Utility {
