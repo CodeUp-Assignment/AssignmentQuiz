@@ -7,25 +7,16 @@ package assignment_java_programming;
  */
 
 import java.util.Scanner;
-import static assignment_java_programming.Utils.isValidEmail;
 
 public class QuizApplication {
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
         Scanner input = new Scanner(System.in);
-        QuestionBank questionBank = new QuestionBank(); 
+        QuestionBank questionBank = new QuestionBank();
+        DefaultQuiz defaultQuiz = new DefaultQuiz();
+        Quiz quiz = new Quiz("");
 
         while (true) {
-            System.out.println(Constants.NAME);
-            String name = input.nextLine();
-
-            System.out.println(Constants.E_MAIL);
-            String email = input.nextLine();
-
-            if (!isValidEmail(email)) {
-                System.out.println(Error.INVALID);
-                continue;
-            }
-
             System.out.println(Constants.USER_CHOICE);
             String choice = input.nextLine();
 
@@ -36,18 +27,12 @@ public class QuizApplication {
 
             switch (choice) {
                 case "1":
-                    // Creator can create the quiz 
-                    Creator creator = new Creator(questionBank);
-                    creator.create();
+                    Creator creator = new Creator(questionBank, quiz);
+                    creator.create(scanner);
                     break;
                 case "2":
-                    // Participant takes the quiz
-                    if (questionBank.getQuestions().isEmpty()) {
-                        System.out.println("No quiz available. Please create a quiz first.");
-                    } else {
-                        Participant participant = new Participant(questionBank);
-                        participant.takeQuiz();
-                    }
+                    Participant participant = new Participant(quiz, questionBank, defaultQuiz);
+                    participant.takeQuiz();
                     break;
                 default:
                     System.out.println("Invalid Choice, please try again.");
