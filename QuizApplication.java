@@ -7,59 +7,53 @@ package assignment_java_programming;
  */
 
 import java.util.Scanner;
+import static assignment_java_programming.Utils.isValidEmail;
 
 public class QuizApplication {
-	
-    // Validates the email format by checking for "@" and "."
-    private static boolean isValidEmail(String email) {
-        return email.contains("@") && email.contains(".");
-    }
-
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
-        try {
-        	DefaultQuiz defaultQuiz = new DefaultQuiz();
-        	while (true) {
-                System.out.println(Constants.NAME);
-                String name = input.nextLine();
+        QuestionBank questionBank = new QuestionBank(); 
 
-                System.out.println(Constants.E_MAIL);
-                String email = input.nextLine();
+        while (true) {
+            System.out.println(Constants.NAME);
+            String name = input.nextLine();
 
-                if (!isValidEmail(email)) {
-                    System.out.println(Error.INVALID);
-                    continue;
-                }               
-                System.out.println(Constants.USER_CHOICE);              
-                String choice = input.nextLine();
+            System.out.println(Constants.E_MAIL);
+            String email = input.nextLine();
 
-                if (choice.equalsIgnoreCase("exit")) {
-                    System.out.println(Constants.EXIT);
-                    break;
-                }
-
-                User user;
-                switch (choice) {
-                    case "1":
-                        // Create a new Creator instance and perform actions related to quiz creation
-                        user = new Creators(name, email);
-                        user.performAction(input);
-                        break;
-                    case "2":
-                        // Placeholder for Participant actions 
-                    	user = new Participant(name, email);
-                    	((Participant) user).performAction(input); 
-                        ((Participant) user).participateInQuiz(input, defaultQuiz);
-                        break;
-                    default:
-                        System.out.println("Invalid Choice, please try again.");
-                        break;
-                }
+            if (!isValidEmail(email)) {
+                System.out.println(Error.INVALID);
+                continue;
             }
-        } catch (RuntimeException e) {
-            throw new RuntimeException(e);
-        } finally {
-            input.close();
+
+            System.out.println(Constants.USER_CHOICE);
+            String choice = input.nextLine();
+
+            if (choice.equalsIgnoreCase("exit")) {
+                System.out.println(Constants.EXIT);
+                break;
+            }
+
+            switch (choice) {
+                case "1":
+                    // Creator can create the quiz 
+                    Creator creator = new Creator(questionBank);
+                    creator.create();
+                    break;
+                case "2":
+                    // Participant takes the quiz
+                    if (questionBank.getQuestions().isEmpty()) {
+                        System.out.println("No quiz available. Please create a quiz first.");
+                    } else {
+                        Participant participant = new Participant(questionBank);
+                        participant.takeQuiz();
+                    }
+                    break;
+                default:
+                    System.out.println("Invalid Choice, please try again.");
+                    break;
+            }
         }
     }
 }
+
