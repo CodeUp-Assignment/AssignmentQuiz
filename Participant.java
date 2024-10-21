@@ -34,7 +34,7 @@ public class Participant {
         System.out.println("1. " + defaultQuiz.getTitle());  
 
         System.out.print("Select a quiz to play (1): ");
-        int selectedQuiz = input.nextInt();
+        String selectedQuiz = input.nextLine();
 
         if (selectedQuiz == 1) {
             play(defaultQuiz);  
