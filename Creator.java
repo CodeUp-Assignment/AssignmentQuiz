@@ -1,214 +1,232 @@
 package assignment_java_programming;
 
-/***
- * The Creator class is responsible for facilitating the creation of quizzes and the addition of questions to a question bank. 
- * It provides methods to interact with the user, guiding them through the process of creating quizzes and managing questions.
- * 
- * Owner : Avadhi-Singhal
- * 
- * Date of Creation : 09/10/2024
- */
-
-/***
- * The Creator class is responsible for facilitating the creation of quizzes and the addition of questions to a question bank.
- * It provides methods to interact with the user, guiding them through the process of creating quizzes and managing questions.
- *
- * Owner : Avadhi-Singhal
- *
- * Date of Creation : 09/10/2024
- */
-
 import java.util.Scanner;
-
+/***
+ * The Creator class facilitates the creation of quizzes and the addition of questions to a QuestionBank.
+ *
+ * Owner : Avadhi-Singhal
+ *
+ * Date of Creation : 09/10/2024
+ */
 public class Creator {
+	
+	Utility utility = new Utility();
+	Constant constant = new Constant();
+    
+    private QuestionBank questionBank;
 
-    public void create(Scanner scanner, QuestionBank questionBank) {
+    /**
+     * Constructor for initializing the Creator with a QuestionBank.
+     * 
+     * @param questionBank The question bank to be managed by the Creator.
+     */
+    public Creator(QuestionBank questionBank) {
+        this.questionBank = questionBank;
+    }
+    
+    /**
+     * Starts the process of creating quizzes and adding questions.
+     */
+    public void create() {
+        Scanner scanner = new Scanner(System.in);
         boolean continueLoop = true;
         while (continueLoop) {
-            displayMenu();
-
-            int choice = getValidChoice(scanner);
+            utility.displayMenu();
+            int choice = utility.getValidChoice(scanner);
 
             switch (choice) {
                 case 1:
-                    String title = getTitle(scanner);
+                    String title = utility.getValidTitle(scanner);
                     Quiz quiz = new Quiz(title);
-                    createQuiz(scanner, quiz, questionBank);
-                    continueLoop = false; // End after creating quiz
+                    createQuiz(scanner, quiz);
                     break;
 
                 case 2:
-                    addQuestions(scanner, questionBank);
-                    continueLoop = false; // End after adding questions
+                    addQuestions(scanner);
                     break;
 
                 case 3:
-                    continueLoop = false; // Exit option
-                    System.out.println("Exiting...");
+                    continueLoop = false;
+                    System.out.println(constant.EXIT_MESSAGE);
                     break;
 
                 default:
-                    System.out.println("Invalid choice. Please try again.");
+                    System.out.println(constant.INVALID_CHOICE);
                     break;
             }
         }
+        scanner.close();
     }
 
-    private void displayMenu() {
-        System.out.println("Choose an option: ");
-        System.out.println("1. Create quiz");
-        System.out.println("2. Add questions");
-        System.out.println("3. Exit");
-    }
-
-    private int getValidChoice(Scanner scanner) {
-        int choice = 0;
-        while (true) {
-            try {
-                System.out.print("Enter your choice (1-3): ");
-                choice = Integer.parseInt(scanner.nextLine());
-                if (choice < 1 || choice > 3) {
-                    System.out.println("Please enter a number between 1 and 3.");
-                    continue;
-                }
-                break; // Valid choice, exit the loop
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Please enter a number between 1 and 3.");
-            }
-        }
-        return choice;
-    }
-
-    private String getTitle(Scanner scanner) {
-        String title;
-        do {
-            System.out.println("Enter the title of the quiz (cannot be empty and must be less than 100 characters): ");
-            title = scanner.nextLine();
-        } while (title.trim().isEmpty() || title.length() > 100);
-        return title;
-    }
-
-    private void createQuiz(Scanner scanner, Quiz quiz, QuestionBank questionBank) {
+    /**
+     * Creates a quiz by allowing the user to select questions from the question bank.
+     * 
+     * @param scanner The scanner to read user input.
+     * @param quiz    The quiz to be created.
+     * @param questionBank The question bank to select questions from.
+     */
+    private void createQuiz(Scanner scanner, Quiz quiz) {
         questionBank.displayQuestions();
 
         if (questionBank.getQuestionCount() == 0) {
-            System.out.println("No questions available to add to the quiz. Returning to main menu.");
+            System.out.println(constant.EMPTY_QUESTION_BANK_MSG);
             return;
         }
 
         boolean addingQuestions = true;
         while (addingQuestions) {
-            System.out.println("Enter the question ID to add to the quiz (or type 'done' to finish): ");
+            System.out.println(constant.ADD_QUESTION_BY_ID);
             String input = scanner.nextLine();
-            if (input.equalsIgnoreCase("done")) {
+            if (input.equalsIgnoreCase(constant.DONE)) {
                 addingQuestions = false;
                 break;
             }
 
-            addQuestionToQuiz(scanner, input, quiz, questionBank);
+            addQuestionToQuiz(scanner, input, quiz);
         }
-        quiz.displayQuiz(); // Display the quiz with added questions
+        quiz.displayQuiz(); 
     }
 
-    private void addQuestionToQuiz(Scanner scanner, String input, Quiz quiz, QuestionBank questionBank) {
+    /**
+     * Adds a selected question from the question bank to the quiz.
+     * 
+     * @param scanner      The scanner to read user input.
+     * @param input        The user input for question ID.
+     * @param quiz         The quiz to add the question to.
+     * @param questionBank The question bank to retrieve questions from.
+     */
+    private void addQuestionToQuiz(Scanner scanner, String input, Quiz quiz) {
         try {
             int questionId = Integer.parseInt(input);
             Question question = questionBank.getQuestionById(questionId);
             if (question != null) {
-                // Add the question directly to the Quiz display
-                System.out.println("Adding question: " + question.getQuestionText());
-                quiz.displayQuiz(); // Update the quiz display to show the added question
+                System.out.println(constant.ADD_QUESTION + question.getQuestionText());
+                quiz.addQuestion(question); 
             } else {
-                System.out.println("Invalid question ID.");
+                System.out.println(constant.INVALID_QUESTION_ID);
             }
         } catch (NumberFormatException e) {
-            System.out.println("Please enter a valid number or 'done' to finish.");
+            System.out.println(constant.PROMPT_VALID_INTEGER);
         }
     }
 
-    private void addQuestions(Scanner scanner, QuestionBank questionBank) {
-        System.out.println("You can add multiple questions. Type 'done' when you are finished.");
+    /**
+     * Allows the user to add new questions to the question bank.
+     * 
+     * @param scanner      The scanner to read user input.
+     * @param questionBank The question bank to add questions to.
+     */
+    private void addQuestions(Scanner scanner) {
+        System.out.println(constant.MULTIPLE_QUESTION_MESSAGE);
 
         boolean addingQuestions = true;
         while (addingQuestions) {
-            String questionText = getQuestionText(scanner);
-            if (questionText.equalsIgnoreCase("done")) {
+            String questionText = utility.getQuestionText(scanner);
+            if (questionText.equalsIgnoreCase(constant.DONE)) {
                 addingQuestions = false;
                 break;
             }
 
-            String[] options = getOptions(scanner);
+            String[] options = getValidOptions(scanner);
             String answer = getAnswer(scanner, options);
             questionBank.addQuestion(questionText, options, answer);
         }
     }
 
-    private String getQuestionText(Scanner scanner) {
-        String questionText;
-        do {
-            System.out.println("Enter the question text (cannot be empty and must be less than 100 characters):");
-            questionText = scanner.nextLine();
-        } while (questionText.trim().isEmpty() || questionText.length() > 100);
-        return questionText;
-    }
+    /**
+     * Gets the options for a question from the user.
+     * 
+     * @param scanner The scanner to read user input.
+     * @return An array of options for the question.
+     */
+    private String[] getValidOptions(Scanner scanner) {
+        String[] options = new String[constant.DEFAULT_OPTIONS_SIZE]; 
+        int optionCount = 0;
 
-    private String[] getOptions(Scanner scanner) {
-        System.out.println("Enter the number of options: ");
-        int optionCount = Integer.parseInt(scanner.nextLine());
-        String[] options = new String[optionCount];
-        for (int i = 0; i < optionCount; i++) {
-            String option;
-            do {
-                System.out.println("Enter option " + (i + 1) + " (cannot be empty and must be less than 100 characters):");
-                option = scanner.nextLine();
-            } while (option.trim().isEmpty() || option.length() > 100);
-            options[i] = option;
+        while (optionCount < constant.DEFAULT_OPTIONS_SIZE) {
+            System.out.println(constant.ENTER_OPTION + (optionCount + 1) + constant.CONSTRAINT_MSG);
+            String option = scanner.nextLine();
+
+            if (option.equalsIgnoreCase(constant.DONE)) {
+                break; 
+            }
+
+            if (option.trim().isEmpty() || option.length() > 100) {
+                System.out.println(constant.EMPTY_OPTION_MSG);
+                continue; 
+            }
+
+            if (isDuplicateOption(option, options, optionCount)) {
+                System.out.println(constant.DUPLICATE_OPTION_MSG);
+                continue; 
+            }
+
+            options[optionCount++] = option; 
         }
-        return options;
+        String[] finalOptions = new String[optionCount];
+        System.arraycopy(options, 0, finalOptions, 0, optionCount);
+        return finalOptions;
     }
 
+    /**
+     * Checks for duplicate options.
+     * 
+     * @param option      The option to check for duplicates.
+     * @param options     The array of existing options.
+     * @param currentCount The current count of options.
+     * @return True if duplicate found, false otherwise.
+     */
+    private boolean isDuplicateOption(String option, String[] options, int currentCount) {
+        for (int i = 0; i < currentCount; i++) {
+            if (options[i].equals(option)) {
+                return true; // Found a duplicate
+            }
+        }
+        return false; // No duplicate found
+    }
+
+    /**
+     * Gets the correct answer for a question from the user.
+     * 
+     * @param scanner The scanner to read user input.
+     * @param options The possible options for the question.
+     * @return The correct answer.
+     */
     private String getAnswer(Scanner scanner, String[] options) {
         String answer = null;
         boolean valid = false;
 
         while (!valid) {
-            System.out.println("Enter the correct answer (must be one of the options and cannot be empty):");
-            answer = scanner.nextLine();
-            valid = !answer.trim().isEmpty();
-
-            // Check if answer is one of the options
-            for (String option : options) {
-                if (answer.equals(option)) {
-                    valid = true;
-                    break;
-                }
+            System.out.println("Enter the correct answer (must be one of the options):");
+            answer = scanner.nextLine().trim(); 
+            String[] lowerCaseOptions = new String[options.length];
+            for (int i = 0; i < options.length; i++) {
+                lowerCaseOptions[i] = options[i].toLowerCase();
             }
 
-            if (!valid) {
-                System.out.println("Invalid answer. Please choose from the given options.");
+            if (isOptionValid(answer, lowerCaseOptions)) {
+                valid = true; 
+            } else {
+                System.out.println("Invalid answer. Please enter one of the provided options.");
             }
         }
-
-        return answer; // Return the valid answer
+        return answer;
     }
 
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        Creator creator = new Creator();
-        QuestionBank questionBank = new QuestionBank();
-
-        // Start the creation process
-        creator.create(scanner, questionBank);
-
-        // Close the scanner after use
-        scanner.close();
+    /**
+     * Checks if the answer is in the provided options.
+     * 
+     * @param answer  The answer to validate.
+     * @param options The array of available options.
+     * @return True if the answer is valid, false otherwise.
+     */
+    private boolean isOptionValid(String answer, String[] options) {
+        String lowerCaseAnswer = answer.toLowerCase();
+        for (String option : options) {
+            if (lowerCaseAnswer.equals(option.toLowerCase())) {
+                return true; 
+            }
+        }
+        return false; 
     }
 }
-
-
-
-
-
-
-
-
