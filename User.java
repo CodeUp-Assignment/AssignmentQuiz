@@ -1,4 +1,4 @@
-package assignment_java_programming;
+package practice.java;
 
 /*
  * The User class defines a blueprint for user objects with common properties (name and email) and an abstract method for performing role-specific actions in the quiz application.
@@ -21,6 +21,7 @@ public abstract class User {
     public String getName() {
         return name;
     }
+   
     // Set the name
     public void setName(String name) {
         this.name = name;
