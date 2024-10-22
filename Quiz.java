@@ -1,5 +1,4 @@
-package assignment_java_programming;
-
+package practice.java;
 /***
  * The Quiz class represents a quiz with a title and a collection of questions.
  * 
@@ -9,7 +8,7 @@ package assignment_java_programming;
  */
 
 public class Quiz {
-	Constant constant = new Constant();
+	Constants constant = new Constants();
 	
     private String title; 
     private Question[] questions; 
@@ -58,4 +57,9 @@ public class Quiz {
         }
         questions = newQuestions; 
     }
+    
+    public String getTitle() {
+    	return title;
+    }
 }
+
