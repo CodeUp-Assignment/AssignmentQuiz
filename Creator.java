@@ -1,5 +1,4 @@
-package assignment_java_programming;
-
+package practice.java;
 import java.util.Scanner;
 /***
  * The Creator class facilitates the creation of quizzes and the addition of questions to a QuestionBank.
@@ -11,8 +10,8 @@ import java.util.Scanner;
 public class Creator {
 	
 	Utility utility = new Utility();
-	Constant constant = new Constant();
-    
+	Constants constant = new Constants();
+    private Quiz quiz;
     private QuestionBank questionBank;
 
     /**
@@ -20,10 +19,10 @@ public class Creator {
      * 
      * @param questionBank The question bank to be managed by the Creator.
      */
-    public Creator(QuestionBank questionBank) {
+    public Creator(QuestionBank questionBank, Quiz quiz) {
         this.questionBank = questionBank;
+        this.quiz = quiz;
     }
-    
     /**
      * Starts the process of creating quizzes and adding questions.
      */
@@ -55,7 +54,6 @@ public class Creator {
                     break;
             }
         }
-        scanner.close();
     }
 
     /**
@@ -229,4 +227,5 @@ public class Creator {
         }
         return false; 
     }
+
 }
