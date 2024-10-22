@@ -1,4 +1,5 @@
-package assignment_java_programming;
+package practice.java;
+
 /***
  * This is the utility class. It provides functioning for validation of user inputs while creating quiz.
  * 
@@ -10,7 +11,7 @@ import java.util.Scanner;
 
 public class Utility {
 	
-	Constant constant = new Constant();
+	Constants constant = new Constants();
 
 	/**
      * Displays the menu options to the user.
