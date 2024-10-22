@@ -1,4 +1,5 @@
-package assignment_java_programming;
+package practice.java;
+
 /***
  * This class contains a set of constant string that are used throughout the program to display messages. 
  * Owner-->Pratul Agarwal
