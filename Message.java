@@ -8,7 +8,7 @@ public class Message {
 	public static final String[] DEFAULT_QUESTIONS =  {
             "What is the keyword used to create a class in Java?",
             "Which data type is used to create a variable that should store text?",
-            "What is the correct way to create an object in Java?",
+            "What is the correct way to create an object in Java?",	
             "Which method can be used to find the length of a string in Java?",
             "What is the output of 10 + 20 + \"30\" in Java?"
         };
