@@ -16,6 +16,7 @@ public class QuizApplication {
         QuestionBank questionBank = new QuestionBank();
         DefaultQuiz defaultQuiz = new DefaultQuiz();
         Quiz quiz = null;
+        int count=0;
 
         // Loop to keep the application running until the user exits
         while (true) {
@@ -37,8 +38,13 @@ public class QuizApplication {
                     break;
                 case "2":
                     // Option 2: Participate in a quiz
-                    Participant participant = new Participant(name, defaultQuiz);
-                    participant.takeQuiz(quiz);
+                    Participant[] participant;
+                    participant = new Participant[5];
+                    if(count<5){
+                        participant[count] = new Participant(name, defaultQuiz);
+                        participant[count].takeQuiz(quiz);
+                        count++;
+                    }
                     break;
 
                 case "exit":
