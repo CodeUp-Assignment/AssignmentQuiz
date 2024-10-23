@@ -1,87 +1,154 @@
 /***
- * This class is created for attempting the quiz. The user gets the questions and their options,
- * and then they must answer the question or navigate through the quiz.
+ * This class allows participants to attempt the quiz.
+ * Users can answer the questions or navigate through the quiz.
+ *
+ * Created by - Kiran Choudhary
+ *
+ * Date - 08 October 2024
  */
-
-package practice.java;
+package assignment_java_programming;
 
 import java.util.Scanner;
 
-public class Participant {
+public class Participant extends User {
+    private DefaultQuiz defaultQuiz;
+    private Scanner input;
+    private int score = 0;
 
-    /** 
-     * Allows the user to attempt a quiz created by the host.
+    /**
+     * Constructor to initialize QuestionBank and DefaultQuiz
+     *
+     * @param defaultQuiz
      */
-    public void attemptQuiz(Creator host, Scanner input) { 
-        Quiz quiz = host.getQuiz(); 
+    public Participant(String name, DefaultQuiz defaultQuiz) {
+        super(name);
+        this.defaultQuiz = defaultQuiz;
+        this.input = new Scanner(System.in);
+    }
 
-        if (quiz == null || quiz.getQuestionCount() == 0) {
-            System.out.println("There is no Quiz created yet."); // Check if the quiz exists
-            return;
+    /**
+     * Displays the available quizzes and lets the user select which quiz to play.
+     */
+    public void takeQuiz(Quiz quiz) {
+        System.out.println(Constant.AVAILABLE_QUIZ);
+        System.out.println("1. " + defaultQuiz.getTitle());
+        if (quiz != null) {
+            System.out.println("2. " + quiz.getTitle());
         }
-
-        System.out.println("Welcome to the Quiz: " + quiz.getTitle()); 
-
-        int questionLength = quiz.getQuestionCount();
-        String[] userAnswer = new String[questionLength]; 
-
-        System.out.println("For Answer - Select from 1-4 \nFor Skip - Click Enter \nFor Previous Question - Write j \nFor Next Question - Write l \nFor Submit - Write k");
-        int i = 0; 
-
-        while (true) {
-            if (i < 0) i = 0;        
-            if (i >= questionLength) i = questionLength - 1;
-
-            Question currentQuestion = quiz.getQuestion(i);
-            if (currentQuestion != null) {
-                System.out.println("Ques" + (i + 1) + ") " + currentQuestion.getQuestionText());
-                for (int j = 0; j < 4; j++) {
-                    System.out.println((j + 1) + ") " + currentQuestion.getOption(j)); 
-                }
-            } else {
-                System.out.println("Question " + (i + 1) + " is not available."); 
-                i++;
-                continue; 
-            }
-
-            String answer = input.nextLine(); 
-            switch (answer) {
-                case "1":
-                case "2":
-                case "3":
-                case "4":
-                    userAnswer[i] = answer; 
-                    i++; 
-                    break;
-                case "j":
-                    if (i > 0) i--;
-                    break;
-                case "l":
-                    if (i < questionLength - 1) i++; 
-                    break;
-                case "k":
-                    submit(userAnswer, quiz); 
-                    return;
-                case "":
-                    i++; 
-                    break;
-                default:
-                    System.out.println("Invalid Input! Please select the correct one."); 
-                    break;
-            }
+        System.out.print("Select a quiz to play : ");
+        String selectedQuiz = input.nextLine();
+        if (selectedQuiz.equals("1")) {
+            attempt(defaultQuiz);
+        } else if (selectedQuiz.equals("2")) {
+            attempt(quiz);
+        } else {
+            System.out.println(Error.INVALID);
         }
     }
 
-    /** 
-     * Submits the user's answers and calculates the score.
-     */
-    private void submit(String[] userAnswer, Quiz quiz) {
-        int score = 0; 
-        for (int i = 0; i < userAnswer.length; i++) {
-            if (userAnswer[i] != null && userAnswer[i].equals(quiz.getQuestion(i).getAnswer())) {
-                score++;
-            }
+    public String[] attempt(Quiz quiz) {
+        int questionCount = quiz.getCurrentQuestionCount();
+        String[] userAnswers = new String[questionCount];
+        int index = 0;
+        while (index < questionCount) {
+            displayQuestion(quiz, index);
+            String choice = input.nextLine();
+            index = handleUserChoice(choice, index, userAnswers);
         }
-        System.out.println("Total Score: " + score);
+        System.out.println(Constant.FINISH);
+        calculateScore(userAnswers, quiz);
+        return userAnswers;
+    }
+
+    public void displayQuestion(Quiz quiz, int index) {
+        Question question = quiz.getQuestions()[index];
+        System.out.println(Constant.QUESTION_NO + (index + 1) + ": " + question.getQuestionText());
+
+        String[] options = question.getOptions();
+        for (int i = 0; i < options.length; i++) {
+            System.out.println((i + 1) + ") " + options[i]);
+        }
+        System.out.println(Constant.NEXT_PREVIOUS_QUESTION);
+    }
+
+    /**
+     * Method to display all quiz questions one by one and allow the participant to answer them.
+     */
+    public String[] attempt(DefaultQuiz defaultQuiz) {
+        System.out.println(Constant.WELCOME + defaultQuiz.getTitle());
+        int questionCount = defaultQuiz.getQuestionCount();
+        String[] userAnswers = new String[questionCount];
+        System.out.println(Constant.PARTICIPANT_CHOICE);
+        int index = 0;
+        while (index < questionCount) {
+            displayQuestion(defaultQuiz, index);
+            String choice = input.nextLine();
+            index = handleUserChoice(choice, index, userAnswers);
+        }
+        System.out.println(Constant.FINISH);
+//        calculateScore(userAnswers);
+        return userAnswers;
+    }
+
+    /**
+     * @param quiz
+     * @param index
+     */
+    public void displayQuestion(DefaultQuiz quiz, int index) {
+        Question question = quiz.getQuestion(index);
+        System.out.println(Constant.QUESTION_NO + (index + 1) + ": " + question.getQuestionText());
+        String[] options = question.getOptions();
+        for (int i = 0; i < options.length; i++) {
+            System.out.println((i + 1) + ") " + options[i]);
+        }
+        System.out.println(Constant.NEXT_PREVIOUS_QUESTION);
+    }
+
+    public int handleUserChoice(String choice, int index, String[] userAnswers) {
+        switch (choice) {
+            case "1":
+            case "2":
+            case "3":
+            case "4":
+                userAnswers[index] = choice;
+                return index + 1;
+
+            case "p":
+                return index - 1;
+
+            case "n":
+                return index + 1;
+
+            case "s":
+                System.out.println(Constant.FINISH);
+                return 1;
+
+            default:
+                System.out.println(Error.INVALID);
+                return index;
+        }
+    }
+
+    /**
+     * Calculates and displays the participant's score.
+     */
+    public void calculateScore(String[] userAnswers, Quiz quiz) {
+
+        for (int i = 0; i < userAnswers.length; i++) {
+            Question[] question = quiz.getQuestions();
+            String correctAnswer = question[i].getAnswer();
+            String[] options = question[i].getOptions();
+            if (correctAnswer.equals(options[Integer.parseInt(userAnswers[i]) - 1])) {
+                score += 1;
+            }
+
+            System.out.println(Constant.SCORE + score + Constant.OUT_OF + userAnswers.length);
+        }
+    }
+
+    public int getScore() {
+        return score;
     }
 }
+
+
