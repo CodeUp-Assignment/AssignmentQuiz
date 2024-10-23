@@ -1,28 +1,29 @@
-package practice.java;
+package assignment_java_programming;
 
 /***
  * This is the utility class. It provides functioning for validation of user inputs while creating quiz.
- * 
+ *
  * Owner: Avadhi-Singhal
- * 
+ *
  * Date of Creation : 21/10/2024
  */
+
 import java.util.Scanner;
 
 public class Utility {
-	
-	Constants constant = new Constants();
 
-	/**
+    Constant constant = new Constant();
+
+    /**
      * Displays the menu options to the user.
      */
     public void displayMenu() {
         System.out.println(constant.CHOOSE_OPTION);
     }
-    
+
     /**
      * Gets a valid menu choice from the user.
-     * 
+     *
      * @param scanner The scanner to read user input.
      * @return A valid choice between 1 and 3.
      */
@@ -43,10 +44,10 @@ public class Utility {
         }
         return choice;
     }
-    
+
     /**
      * Gets the title of the quiz from the user.
-     * 
+     *
      * @param scanner The scanner to read user input.
      * @return The title of the quiz.
      */
@@ -58,10 +59,10 @@ public class Utility {
         } while (title.trim().isEmpty() || title.length() > constant.MAXIMUM_CHARACTERS);
         return title;
     }
-    
+
     /**
      * Gets the question text from the user.
-     * 
+     *
      * @param scanner The scanner to read user input.
      * @return The question text.
      */
