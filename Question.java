@@ -1,24 +1,25 @@
-package practice.java;
+package assignment_java_programming;
+
 /***
  * The Question class represents an individual question in a quiz, including its text, answer options,
- * and correct answer. Each Question object has a unique ID that can be used to reference it in a question 
+ * and correct answer. Each Question object has a unique ID that can be used to reference it in a question
  * bank or quiz.
- * 
+ *
  * Owner : Avadhi-Singhal
- * 
+ *
  * Date of Creation: 21/10/2024
  */
 
 public class Question {
-    private final int id; 
-    private String questionText; 
-    private String[] options; 
-    private String answer; 
+    private final int id;
+    private String questionText;
+    private String[] options;
+    private String answer;
 
     /**
      * Constructor for initializing the question with its details.
-     * 
-     * @param id          The unique identifier for the question.
+     *
+     * @param id           The unique identifier for the question.
      * @param questionText The text of the question.
      * @param options      The possible options for the question.
      * @param answer       The correct answer.
@@ -26,16 +27,16 @@ public class Question {
     public Question(int id, String questionText, String[] options, String answer) {
         this.id = id;
         this.questionText = questionText;
-        this.options = new String[options.length]; 
+        this.options = new String[options.length];
         for (int i = 0; i < options.length; i++) {
-            this.options[i] = options[i]; 
+            this.options[i] = options[i];
         }
         this.answer = answer;
     }
 
     /**
      * Gets the unique identifier of the question.
-     * 
+     *
      * @return The ID of the question.
      */
     public int getId() {
@@ -44,7 +45,7 @@ public class Question {
 
     /**
      * Gets the text of the question.
-     * 
+     *
      * @return The question text.
      */
     public String getQuestionText() {
@@ -53,7 +54,7 @@ public class Question {
 
     /**
      * Gets the correct answer of the question.
-     * 
+     *
      * @return The correct answer.
      */
     public String getAnswer() {
@@ -62,7 +63,7 @@ public class Question {
 
     /**
      * Gets the possible options for the question.
-     * 
+     *
      * @return An array of options.
      */
     public String[] getOptions() {
