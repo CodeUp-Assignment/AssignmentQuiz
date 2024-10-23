@@ -16,8 +16,8 @@ public class QuizWithGraph {
         // Store the score and resize the array if necessary
         addScoreToGraph(participantName, participantScore);
 
-        // Render the vertical star ranking graph
-        renderVerticalStarGraph();
+        // Render the block graph
+        renderBlockGraph();
     }
 
     // Add score to the graph
@@ -37,27 +37,36 @@ public class QuizWithGraph {
         scores = newScores;
     }
 
-    // Render the graph with vertical stars representing the score
-    private void renderVerticalStarGraph() {
+    // Render the block graph with stars outlining the blocks
+    private void renderBlockGraph() {
         int maxScore = getMaxScore();  // Get the maximum score to determine graph height
 
-        // Print the graph from top (max score) down to 1
+        // For each row (from max score down to 1), print blocks
         for (int i = maxScore; i > 0; i--) {
             for (int j = 0; j < scoreCount; j++) {
                 if (scores[j].getScore() >= i) {
-                    System.out.print(" * ");  // Print a star if the score is equal to or greater than the row
+                    printBlock(i, scores[j].getScore());
                 } else {
-                    System.out.print("   ");  // Empty space for scores lower than the current row
+                    System.out.print("     ");  // Empty space for participants with lower scores
                 }
             }
             System.out.println();  // New line after each row
         }
 
-        // Print the participant names below the graph
+        // Print the X-axis with participant names
         for (int i = 0; i < scoreCount; i++) {
-            System.out.print(" " + padString(scores[i].getName(), 3) + " ");
+            System.out.print(" " + manualPadString(scores[i].getName(), 5) + " ");
         }
         System.out.println();
+    }
+
+    // Print a block for a given score (stars as outline)
+    private void printBlock(int currentRow, int score) {
+        if (currentRow == score || currentRow == 1) {
+            System.out.print(" *** ");  // Top or bottom row of the block
+        } else {
+            System.out.print(" * * ");  // Middle part of the block (stars on the sides)
+        }
     }
 
     // Helper method to find the maximum score for graph height
@@ -71,18 +80,27 @@ public class QuizWithGraph {
         return maxScore;
     }
 
-    // Helper method to format participant names to a fixed width
-    private String padString(String name, int length) {
-        if (name.length() >= length) {
-            return name.substring(0, length);  // Truncate if longer
+    // Manually pad a string to the specified length
+    private String manualPadString(String name, int length) {
+        char[] paddedName = new char[length];
+        int nameLength = name.length();
+
+        // Copy the original name into the char array
+        for (int i = 0; i < length; i++) {
+            if (i < nameLength) {
+                paddedName[i] = name.charAt(i);  // Copy character from name
+            } else {
+                paddedName[i] = ' ';  // Fill remaining spaces with space
+            }
         }
 
-        // Pad with spaces if shorter
-        StringBuilder paddedName = new StringBuilder(name);
-        while (paddedName.length() < length) {
-            paddedName.append(" ");
+        // Convert char array to string without using inbuilt functions
+        String result = "";
+        for (int i = 0; i < paddedName.length; i++) {
+            result += paddedName[i];  // Concatenate each character
         }
-        return paddedName.toString();
+
+        return result;
     }
 
     // ParticipantScore class to store participant's name and score
